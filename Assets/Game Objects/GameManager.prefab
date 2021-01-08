@@ -40,6 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6448570939318303965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24e811653586048c1be5852c00bb9cde, type: 3}
+  m_Script: {fileID: 11500000, guid: 03f396748cb0234488805396612751c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalSpawnEnemies: 0

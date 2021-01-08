@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     [Header("Global options")]
     [SerializeField]
     private bool globalSpawnEnemies;
-    
+
     private bool pausedGame;
     private bool startedGame;
     private bool endedGame;
@@ -26,9 +26,9 @@ public class GameManager : MonoBehaviour
         ResumeGame();
 
         player = GameObject.FindGameObjectWithTag("Player");
-        if (player) playerController=player.GetComponent<PlayerController>();
+        if (player) playerController = player.GetComponent<PlayerController>();
         hud = GameObject.FindGameObjectWithTag("HUD");
-        if (hud) hudManager =hud.GetComponent<HudManager>();
+        if (hud) hudManager = hud.GetComponent<HudManager>();
 
         CheckGlobalEnemySpawn();
     }
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         pausedGame = true;
     }
-    
+
     private void ResumeGame()
     {
         Time.timeScale = 1;
@@ -111,12 +111,12 @@ public class GameManager : MonoBehaviour
 
     private bool CheckGlobalEnemySpawn()
     {
-    
-            GameObject[] enemySpawners = GameObject.FindGameObjectsWithTag("enemyspawner");
-            foreach (GameObject enemySpawner in enemySpawners)
-            {
-                enemySpawner.GetComponent<ItemSpawn>().SetGlobalEnabling(globalSpawnEnemies);
-            }
+
+        GameObject[] enemySpawners = GameObject.FindGameObjectsWithTag("enemyspawner");
+        foreach (GameObject enemySpawner in enemySpawners)
+        {
+            enemySpawner.GetComponent<ItemSpawn>().SetGlobalEnabling(globalSpawnEnemies);
+        }
         return globalSpawnEnemies;
     }
 
