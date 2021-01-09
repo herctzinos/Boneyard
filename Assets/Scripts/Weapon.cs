@@ -1,17 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Entities;
 using Unity.Collections;
-using Unity.Transforms;
-
 
 
 public class Weapon : MonoBehaviour
 {
     public GameObject projectile;
 
-    public bool useECS;
     public int projectileCount;
     public int projectileSpread = 20;
     public int fireSpeed = 100;
@@ -29,17 +25,11 @@ public class Weapon : MonoBehaviour
 
     private float timePassed = 0f;
 
-    EntityManager manager;
-    Entity projectileEntityPrefab;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        if (useECS)
-        {
-            manager = World.Active.EntityManager;
-            projectileEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(projectile, World.Active);
-        }
         SetInitialValues();
         SetRequiredMana();
     }
@@ -66,15 +56,8 @@ public class Weapon : MonoBehaviour
     {
         if (timePassed >= 1 / fireRate && CheckRequiredMana(receivedMana))
         {
-            if (useECS)
-            {
-                fireECS();
-            }
-            else
-            {
-                fireGO();
-            }
 
+            fireGO();
             timePassed = 0f;
             return true;
         }
@@ -106,27 +89,6 @@ public class Weapon : MonoBehaviour
             //newProjectile.transform.Rotate(projectileDirection);
             //newProjectileRB.velocity = transform.forward*fireSpeed * Time.deltaTime;
         }
-    }
-
-    private void fireECS()
-    {
-
-        int pspr = projectileSpread / projectileCount;
-
-        NativeArray<Entity> projectiles = new NativeArray<Entity>(projectileCount, Allocator.TempJob);
-        manager.Instantiate(projectileEntityPrefab, projectiles);
-
-        for (int i = 1; i <= projectileCount; i++)
-        {
-            manager.SetComponentData(projectiles[i - 1], new Translation { Value = transform.position });
-
-            Quaternion spawnRotation = transform.rotation;
-            spawnRotation *= Quaternion.Euler(0, -projectileSpread / 2 + pspr * i, 0);
-            manager.SetComponentData(projectiles[i - 1], new Rotation { Value = spawnRotation });
-        }
-
-        timePassed = 0f;
-        projectiles.Dispose();
     }
 
 

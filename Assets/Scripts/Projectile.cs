@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Entities;
 
-public class Projectile : MonoBehaviour,IConvertGameObjectToEntity
+
+public class Projectile : MonoBehaviour
 {
     //Projectile configurable properties
     public float lifespan = 1f;
@@ -124,15 +124,4 @@ public class Projectile : MonoBehaviour,IConvertGameObjectToEntity
         }
     }
 
-    public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
-    {
-        dstManager.AddComponent(entity, typeof(MoveForward));
-
-        MoveSpeed moveSpeed = new MoveSpeed { Value = velocity };
-        dstManager.AddComponentData(entity, moveSpeed);
-
-        TimeToLive ttl = new TimeToLive { Value = lifespan };
-        dstManager.AddComponentData(entity, ttl);
-
-    }
 }
