@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Collections;
-
+using System;
 
 public class Weapon : MonoBehaviour
 {
@@ -25,6 +25,9 @@ public class Weapon : MonoBehaviour
 
     private float timePassed = 0f;
 
+    GameObject projectileParent;
+    const string PROJECTILE_PARENT_NAME = "Projectiles";
+
 
 
     // Start is called before the first frame update
@@ -32,6 +35,17 @@ public class Weapon : MonoBehaviour
     {
         SetInitialValues();
         SetRequiredMana();
+        CreateProjectileParent();
+
+    }
+
+    private void CreateProjectileParent()
+    {
+        projectileParent = GameObject.Find(PROJECTILE_PARENT_NAME);
+        if (!projectileParent)
+        {
+            projectileParent = new GameObject(PROJECTILE_PARENT_NAME);
+        }
     }
 
     // Update is called once per frame
@@ -80,10 +94,13 @@ public class Weapon : MonoBehaviour
             Quaternion spawnRotation = transform.rotation;
             float yRotation = initRot + (pspr * i);
             spawnRotation *= Quaternion.Euler(0, yRotation, 0);
-            GameObject newProjectile = Instantiate(projectile, spawnPosition, spawnRotation);
+            // GameObject newProjectile = Instantiate(projectile, spawnPosition, spawnRotation);
+            GameObject newProjectile =
+            Instantiate(projectile, spawnPosition, spawnRotation);
+            newProjectile.transform.parent = projectileParent.transform;
             //newProjectile.GetComponent<Projectile>().SetVelocity(fireSpeed);
             Rigidbody newProjectileRB = newProjectile.GetComponent<Rigidbody>();
-            newProjectileRB.AddForce(newProjectileRB.transform.forward* fireSpeed, ForceMode.Impulse);
+            newProjectileRB.AddForce(newProjectileRB.transform.forward * fireSpeed, ForceMode.Impulse);
             //newProjectile.transform.rotation = Quaternion.LookRotation(vForce);
             //Vector3 projectileDirection = new Vector3(transform.rotation.x, -projectileSpread / 2 + pspr * (i + 1), transform.rotation.z);
             //newProjectile.transform.Rotate(projectileDirection);
@@ -107,9 +124,9 @@ public class Weapon : MonoBehaviour
         float reqMana;
 
         reqMana = basicManaRequirement *
-            (projectileCount/initialProjectileCount) *
-            (basicManaRequirement + ((projectileSpread/initialProjectileSpread)/10)) *
-            (basicManaRequirement + ((fireSpeed / initialFireSpeed)/10));
+            (projectileCount / initialProjectileCount) *
+            (basicManaRequirement + ((projectileSpread / initialProjectileSpread) / 10)) *
+            (basicManaRequirement + ((fireSpeed / initialFireSpeed) / 10));
 
         return reqMana;
     }

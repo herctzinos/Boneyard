@@ -38,7 +38,11 @@ public class ItemSpawn : MonoBehaviour
         {
             nextSpawn = Time.time + spawnRate;
             spawnPosition = transform.position;
-            GameObject newItemy = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
+           // GameObject newItemy = Instantiate(objectToSpawn, spawnPosition, Quaternion.identity);
+            GameObject newSpawnedObject = Instantiate(objectToSpawn, spawnPosition, transform.rotation);
+            newSpawnedObject.transform.parent = transform;
+
+
             //Rigidbody newItemRB = newItemy.GetComponent<Rigidbody>();
         }
     }
