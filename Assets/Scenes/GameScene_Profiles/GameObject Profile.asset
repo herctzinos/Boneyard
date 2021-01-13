@@ -21,13 +21,13 @@ MonoBehaviour:
     value: 10.9
   aperture:
     overrideState: 1
-    value: 0.6
+    value: 0.67
   focalLength:
     overrideState: 1
-    value: 60
+    value: 48.1
   kernelSize:
     overrideState: 0
-    value: 1
+    value: 0
 --- !u!114 &-6386218211186532303
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1468,19 +1468,19 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 9.61
+    value: 7.33
   threshold:
     overrideState: 1
     value: 0.56
   softKnee:
     overrideState: 1
-    value: 0.58
+    value: 0.526
   clamp:
     overrideState: 1
     value: 65474.93
   diffusion:
     overrideState: 1
-    value: 6.92
+    value: 7.13
   anamorphicRatio:
     overrideState: 1
     value: 0
