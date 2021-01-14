@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
     void MoveAndRotatePlayer(Vector3 movement, Vector3 rotation)
     {
-        if ((!Mathf.Approximately(rotation.x , 0f)) || (!Mathf.Approximately(rotation.z, 0f)))
+        if ((rotation.x!=0f) || (rotation.z!= 0f))
         {
             transform.rotation = Quaternion.LookRotation(rotation);
         }
