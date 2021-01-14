@@ -190,8 +190,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.12, y: 2.15, z: 1}
+  m_Center: {x: -0.03, y: 0.58, z: 0}
 --- !u!114 &4141361439779108143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0641a4cbddf45b69a231e67c11039c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: 5
+  velocity: 6
   health: 10
   attackStrength: 10
   returnedExp: 5

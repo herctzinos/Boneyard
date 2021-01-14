@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 1;
     [SerializeField]
+    private float smoothRotate = 1;
+    [SerializeField]
     private float manaRegenRate = 0.1f;
 
     [Header("Player Controls")]
@@ -61,7 +63,7 @@ public class PlayerController : MonoBehaviour
         Vector3 newPlayerRotation = GetPlayerRotation();
 
         MoveAndRotatePlayer(newPlayerVelocity,newPlayerRotation);
-        CheckFire();
+        CheckFire(newPlayerRotation);
         CheckHealth();
 
     }
@@ -73,11 +75,11 @@ public class PlayerController : MonoBehaviour
             mana += manaRegenRate;
         }
     }
-    private void CheckFire()
+    private void CheckFire(Vector3 rotation)
     {
         timePassed += Time.deltaTime;
 
-        if (joybutton.pressed)
+        if (rotation.x!=0f || rotation.y!=0f)
         {
             if (timePassed >= keyDelay)
             {
@@ -89,8 +91,8 @@ public class PlayerController : MonoBehaviour
 
     Vector3 GetPlayerMovement()
     {
-        float moveHorizontal = Input.GetAxisRaw("LeftHorizontal");
-        float moveVertical = Input.GetAxisRaw("LeftVertical");
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
         
 
         //float moveHorizontal = leftJoystick.Horizontal;
@@ -117,14 +119,16 @@ public class PlayerController : MonoBehaviour
 
     void MoveAndRotatePlayer(Vector3 movement, Vector3 rotation)
     {
-        if ((rotation.x!=0f) || (rotation.z!= 0f))
-        {
-            transform.rotation = Quaternion.LookRotation(rotation);
+
+        if (rotation.x != 0f || rotation.y != 0f) { 
+            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, rotation, smoothRotate));
         }
-        else
+        else if (movement.x != 0f || movement.y != 0f)
         {
-            transform.rotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, movement, smoothRotate));
         }
+
+
         //transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
         playerRB.velocity = movement * moveSpeed * Time.deltaTime;
     }

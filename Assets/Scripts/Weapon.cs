@@ -11,7 +11,7 @@ public class Weapon : MonoBehaviour
     public int projectileCount;
     public int projectileSpread = 20;
     public int fireSpeed = 100;
-    public int fireRate = 1;
+    public float fireRate = 1;
 
     private int initialFireSpeed;
     private int initialProjectileSpread;
