@@ -18,7 +18,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Controls")]
     [SerializeField]
-    private Joystick joystick;
+    private Joystick leftJoystick;
+    [SerializeField]
+    private Joystick rightJoystick;
     [SerializeField]
     private JoyButton joybutton;
 
@@ -56,7 +58,9 @@ public class PlayerController : MonoBehaviour
         RegenMana();
 
         Vector3 newPlayerVelocity = GetPlayerMovement();
-        MoveAndRotatePlayer(newPlayerVelocity);
+        Vector3 newPlayerRotation = GetPlayerRotation();
+
+        MoveAndRotatePlayer(newPlayerVelocity,newPlayerRotation);
         CheckFire();
         CheckHealth();
 
@@ -85,19 +89,39 @@ public class PlayerController : MonoBehaviour
 
     Vector3 GetPlayerMovement()
     {
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
-        float moveVertical = Input.GetAxisRaw("Vertical");
-        //float moveHorizontal = joystick.Horizontal;
-        //float moveVertical = joystick.Vertical;
+        float moveHorizontal = Input.GetAxisRaw("LeftHorizontal");
+        float moveVertical = Input.GetAxisRaw("LeftVertical");
+        
+
+        //float moveHorizontal = leftJoystick.Horizontal;
+        //float moveVertical = leftJoystick.Vertical;
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
         return movement;
     }
 
-    void MoveAndRotatePlayer(Vector3 movement)
+    Vector3 GetPlayerRotation()
     {
-        if ((!Mathf.Approximately(movement.x , 0f)) || (!Mathf.Approximately(movement.z, 0f)))
+       
+        //float rotateHorizontal = rightJoystick.Horizontal;
+        //float rotateVertical = rightJoystick.Vertical;
+
+        float rotateHorizontal = Input.GetAxis("RightHorizontal");
+        float rotateVertical = Input.GetAxis("RightVertical");
+
+        Vector3 rotation = new Vector3(rotateHorizontal, 0.0f, rotateVertical);
+
+        return rotation;
+    }
+
+    void MoveAndRotatePlayer(Vector3 movement, Vector3 rotation)
+    {
+        if ((!Mathf.Approximately(rotation.x , 0f)) || (!Mathf.Approximately(rotation.z, 0f)))
+        {
+            transform.rotation = Quaternion.LookRotation(rotation);
+        }
+        else
         {
             transform.rotation = Quaternion.LookRotation(movement);
         }
