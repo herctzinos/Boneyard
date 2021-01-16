@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 newPlayerVelocity = GetPlayerMovement();
         Vector3 newPlayerRotation = GetPlayerRotation();
-
+        
         MoveAndRotatePlayer(newPlayerVelocity,newPlayerRotation);
         CheckFire(newPlayerRotation);
         CheckHealth();
@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
     {
         timePassed += Time.deltaTime;
 
-        if (rotation.x!=0f || rotation.y!=0f)
+        if (rotation.x!=0f || rotation.z!=0f)
         {
             if (timePassed >= keyDelay)
             {
@@ -120,10 +120,10 @@ public class PlayerController : MonoBehaviour
     void MoveAndRotatePlayer(Vector3 movement, Vector3 rotation)
     {
 
-        if (rotation.x != 0f || rotation.y != 0f) { 
+        if (rotation.x != 0f || rotation.z != 0f) { 
             transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, rotation, smoothRotate));
         }
-        else if (movement.x != 0f || movement.y != 0f)
+        else if (movement.x != 0f || movement.z != 0f)
         {
             transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, movement, smoothRotate));
         }
