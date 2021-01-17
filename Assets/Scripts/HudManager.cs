@@ -39,6 +39,10 @@ public class HudManager : MonoBehaviour
     private Text levelText;
 
     [SerializeField]
+    private Text goldText;
+    private float goldAmmount;
+
+    [SerializeField]
     private GameObject levelupMenu;
 
     private PlayerController player;
@@ -51,11 +55,12 @@ public class HudManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         HandleHealthBar();
         HandleManaBar();
         HandleExpBar();
+        HandleGold();
     }
 
     private void HandleHealthBar()
@@ -84,6 +89,13 @@ public class HudManager : MonoBehaviour
         expText.text = exp.ToString("0") + " / " + maxExp.ToString("0");
         levelText.text = level.ToString();
 
+    }
+
+    private void HandleGold()
+    {
+        float goldSmooth = Mathf.Lerp(goldAmmount , player.GetGold(),Time.deltaTime*5);
+        goldAmmount = goldSmooth;
+        goldText.text = Mathf.Round(goldSmooth).ToString();
     }
 
     private float MapValue(float value,  float maxValue)

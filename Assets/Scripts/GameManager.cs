@@ -19,17 +19,20 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private PlayerController playerController;
 
-
+    public GameData gd;
+    
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        
+        LoadData();
         ResumeGame();
 
         player = GameObject.FindGameObjectWithTag("Player");
         if (player) playerController = player.GetComponent<PlayerController>();
         hud = GameObject.FindGameObjectWithTag("HUD");
         if (hud) hudManager = hud.GetComponent<HudManager>();
-
+        
         CheckGlobalEnemySpawn();
     }
 
@@ -104,9 +107,24 @@ public class GameManager : MonoBehaviour
         return endedGame;
     }
 
-    private void SaveData()
+    private void LoadData()
     {
+        Debug.Log("GameData: " + PlayerPrefs.GetString("GameData"));
 
+        if (PlayerPrefs.HasKey("GameData")&& PlayerPrefs.GetString("GameData")!="")
+        {
+            gd = JsonUtility.FromJson<GameData>(PlayerPrefs.GetString("GameData"));
+        }
+        else
+        {
+            gd = new GameData();
+        }
+    }
+    public void SaveData()
+    {
+        gd.playerGold = playerController.GetGold();
+        gd.maxLevelReached = playerController.GetLevel();
+        PlayerPrefs.SetString("GameData",JsonUtility.ToJson(gd));
     }
 
     private bool CheckGlobalEnemySpawn()

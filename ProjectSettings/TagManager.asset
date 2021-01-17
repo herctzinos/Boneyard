@@ -11,15 +11,16 @@ TagManager:
   - HUD
   - enemyspawner
   - active_weapon
+  - Gold
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
+  - DroppedItems
+  - Enemies
   - Front
   - Camera
   - 

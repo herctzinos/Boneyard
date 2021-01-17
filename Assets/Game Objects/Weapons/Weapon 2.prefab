@@ -47,7 +47,7 @@ MonoBehaviour:
     type: 3}
   projectileCount: 1
   projectileSpread: 30
-  fireSpeed: 10
-  fireRate: 5
+  fireSpeed: 15
+  fireRate: 6
   basicManaRequirement: 0.1
   requiredMana: 0

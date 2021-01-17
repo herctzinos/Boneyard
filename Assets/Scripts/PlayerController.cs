@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     private float levelUpFactor = 1.2f;
     private float health;
+    private int gold;
     private float mana;
     private float exp;
     private int level=1;
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private float keyDelay = 0.1f;
     private Weapon activeWeaponScript;
     private GameManager gameManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -151,7 +153,14 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Gold")
+        {
+            int goldAmmount = other.gameObject.GetComponent<GoldScript>().GetGold();
+            GaintGold(goldAmmount);
+        }
+    }
     public void ReceiveDamage(float damage,Vector3 attackerDirecion)
     {
         health -= damage;
@@ -176,6 +185,21 @@ public class PlayerController : MonoBehaviour
     public float GetExp()
     {
         return exp;
+    }
+
+    public int GetGold()
+    {
+        return gold;
+    }
+
+    public void SetGold(int goldToSet)
+    {
+        gold = goldToSet;
+    }
+
+    public void GaintGold(int goldToGain)
+    {
+        gold += goldToGain;
     }
 
     public int GetLevel()
@@ -219,6 +243,7 @@ public class PlayerController : MonoBehaviour
         gameManager.HandleOpenLevelUpMenu();
         level += 1;
         LevelUpStats();
+        gameManager.SaveData();
         ResetStats();
         return level;
     }
@@ -236,6 +261,8 @@ public class PlayerController : MonoBehaviour
         mana = maxMana;
         health = maxHealth;
         exp = 0;
+        Debug.Log(gameManager.gd.playerGold);
+        gold = gameManager.gd.playerGold;
     }
 
     private void CheckHealth()

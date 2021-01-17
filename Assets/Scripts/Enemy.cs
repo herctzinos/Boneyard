@@ -13,17 +13,24 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int returnedExp = 5;
 
+    [SerializeField]
+    private GameObject itemToDrop;
+    [SerializeField]
+    private float itemDropProbavility=0.5f;
+
     private PlayerController player;
     private Rigidbody rb;
     private Rigidbody playerRb;
 
     private Vector3 movement;
 
-
-
+    GameObject droppedItemsLayer;
+    private bool isAlive;
     // Start is called before the first frame update
     void Start()
     {
+        isAlive = true;
+        droppedItemsLayer = GameObject.Find("DroppedItems");
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         rb = this.GetComponent<Rigidbody>();
     }
@@ -35,7 +42,7 @@ public class Enemy : MonoBehaviour
     }
     void FixedUpdate()
     {
-        MoveEnemy(movement);
+        if (isAlive) MoveEnemy(movement);
     
     }
 
@@ -47,7 +54,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag=="projectile")
+        if (other.tag=="projectile" && isAlive)
         {
             float damage = other.GetComponent<Projectile>().GetPower();
             ReceiveDamage(damage, other.transform.forward);
@@ -56,7 +63,7 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && isAlive)
         {
             other.gameObject.GetComponent<PlayerController>().ReceiveDamage(attackStrength,this.gameObject.transform.forward);
         }
@@ -76,7 +83,29 @@ public class Enemy : MonoBehaviour
 
     void Kill()
     {
-        player.GainExp(returnedExp);
-        Destroy(this.gameObject);
+        if (isAlive)
+        {
+            isAlive = false;
+            player.GainExp(returnedExp);
+            RandomDropObject(itemToDrop, itemDropProbavility);
+            Destroy(this.gameObject);
+        }
+
+    }
+
+    void RandomDropObject(GameObject obj,float probability)
+    {
+        float randomFactor = Random.Range(0f, 1f);
+        if (randomFactor < probability)
+        {
+            DropObject(obj);
+        }
+    }
+
+    void DropObject(GameObject obj)
+    {
+        GameObject newItem = Instantiate(obj,transform.position,transform.rotation);
+        newItem.transform.parent = droppedItemsLayer.transform;
+
     }
 }
