@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool globalSpawnEnemies;
 
+    int currentSceneIndex;
+    [SerializeField] int timeToWait = 4;
+
     private bool pausedGame;
     private bool startedGame;
     private bool endedGame;
@@ -24,7 +27,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        
+
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (currentSceneIndex == 0)
+        {
+            StartCoroutine(WaitForTime());
+        }
+
         LoadData();
         ResumeGame();
 
@@ -36,22 +45,68 @@ public class GameManager : MonoBehaviour
         CheckGlobalEnemySpawn();
     }
 
+    IEnumerator WaitForTime()
+    {
+        yield return new WaitForSeconds(timeToWait);
+        LoadNextScene();
+    }
+
+ 
     private void TogglePause()
     {
         if (pausedGame) ResumeGame();
         else PauseGame();
     }
 
-    public void StartGame()
-    {
-        startedGame = true;
-        SceneManager.LoadScene("GameScene");
-    }
+    /* public void StartGame()
+     {
+         startedGame = true;
+         SceneManager.LoadScene("GameScene");
+     }
 
-    public void ResetGame()
+     public void ResetGame()
+     {
+         Time.timeScale = 1;
+         SceneManager.LoadScene("StartScene");
+     }*/
+
+
+    public void RestartScene()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("StartScene");
+        SceneManager.LoadScene(currentSceneIndex);
+
+    }
+
+    public void LoadMainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Start Screen");
+
+    }
+    
+    public void LoadSplashScreen()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Splash Screen");
+
+    }
+
+    public void LoadOptionsScreen()
+    {
+        SceneManager.LoadScene("Options Screen");
+
+    }
+
+    public void LoadNextScene()
+    {
+        SceneManager.LoadScene(currentSceneIndex + 1);
+
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     private void PauseGame()
@@ -120,6 +175,7 @@ public class GameManager : MonoBehaviour
             gd = new GameData();
         }
     }
+
     public void SaveData()
     {
         gd.playerGold = playerController.GetGold();
@@ -137,5 +193,6 @@ public class GameManager : MonoBehaviour
         }
         return globalSpawnEnemies;
     }
+
 
 }
