@@ -8,7 +8,7 @@ public class MusicPlayer : MonoBehaviour
 {
 
     AudioSource audioSource;
-    public MusicPlayer musicPlayer;
+   /// public MusicPlayer musicPlayer;
     // Start is called before the first frame update
     void Start()
     {
