@@ -36,7 +36,7 @@ public class OptionsController : MonoBehaviour
     {
         PlayerPrefsController.SetMasterVolume(volumeSlider.value);
         PlayerPrefsController.SetDifficulty(difficultySlider.value);
-        FindObjectOfType<GameManager>().LoadMainMenu();
+        FindObjectOfType<GameManager>().LoadStartScreen();
     }
 
     public void SetDefaults()

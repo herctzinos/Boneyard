@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     IEnumerator WaitForTime()
     {
         yield return new WaitForSeconds(timeToWait);
-        LoadNextScene();
+        LoadStartScreen();
     }
 
  
@@ -78,29 +78,41 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void LoadMainMenu()
+    public void LoadStartScreen()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("Start Screen");
+        SceneManager.LoadScene("StartScreen");
 
     }
     
     public void LoadSplashScreen()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("Splash Screen");
+        SceneManager.LoadScene("SplashScreen");
 
     }
 
     public void LoadOptionsScreen()
     {
-        SceneManager.LoadScene("Options Screen");
+        SceneManager.LoadScene("OptionsScreen");
 
+    } 
+    
+    public void OpenStatsScreen()
+    {
+        PauseGame();
+        hudManager.DisplayStats();
     }
 
-    public void LoadNextScene()
+    public void CloseStatsScreen()
     {
-        SceneManager.LoadScene(currentSceneIndex + 1);
+        hudManager.HideStats();
+        ResumeGame();
+    }
+
+    public void LoadGameScene1()
+    {
+        SceneManager.LoadScene("GameScene");
 
     }
 
@@ -121,7 +133,7 @@ public class GameManager : MonoBehaviour
         pausedGame = false;
     }
 
-    public void EndGame()
+    public void LoadGameOverScene()
     {
         Time.timeScale = 0;
         endedGame = true;

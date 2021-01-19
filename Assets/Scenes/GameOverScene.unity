@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 487260171}
   - component: {fileID: 487260173}
   m_Layer: 5
-  m_Name: Quit Text
+  m_Name: Quit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -248,7 +248,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -0.84375286, y: -9.950409}
+  m_AnchoredPosition: {x: -0.84375286, y: -9.950439}
   m_SizeDelta: {x: 672.29, y: 179.39001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &487260171
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8301887, g: 0.8019936, b: 0.8119, a: 1}
+  m_Color: {r: 0.8980392, g: 0.94509804, b: 0.8862745, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 1009339748}
   - component: {fileID: 1009339750}
   m_Layer: 5
-  m_Name: Start Text
+  m_Name: Start Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -726,7 +726,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1117003869}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadSplashScreen
+        m_MethodName: LoadStartScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -803,11 +803,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6448570939318303965, guid: 55b4f30b377fd497dad42b5e41357b49,
+        type: 3}
+      propertyPath: m_TagString
+      value: GameManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55b4f30b377fd497dad42b5e41357b49, type: 3}
 --- !u!114 &1117003869 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6448570939318303955, guid: 55b4f30b377fd497dad42b5e41357b49,
+  m_CorrespondingSourceObject: {fileID: 7729811724747432399, guid: 55b4f30b377fd497dad42b5e41357b49,
     type: 3}
   m_PrefabInstance: {fileID: 1117003868}
   m_PrefabAsset: {fileID: 0}

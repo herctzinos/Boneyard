@@ -43,5 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2ce8cfa134843b791bd468e02e666f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 7129999144196394703, guid: 086a69839221f402e9ff5cdb62b2df5b, type: 3}
-  enemySpawnRate: 2
+  active: 1
+  objectToSpawn: {fileID: 7129999144196394703, guid: a212b08aac414433eb39d529a2546efd,
+    type: 3}
+  spawnRate: 0
+  itemsToSpawn: 1
+  itemsInitialSpeed: 0

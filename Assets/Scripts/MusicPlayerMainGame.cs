@@ -22,7 +22,7 @@ public class MusicPlayerMainGame : MonoBehaviour
 
     void Update()
     {
-        if ((SceneManager.GetActiveScene().name != "GameScene") && (SceneManager.GetActiveScene().name != "GameOverScene")) { 
+        if ((SceneManager.GetActiveScene().name != "GameScene") && (SceneManager.GetActiveScene().name != "GameOverScene") && (SceneManager.GetActiveScene().name != "StatsScreen")) { 
             Destroy(gameObject);
            // Destroy(audioSource);
         }

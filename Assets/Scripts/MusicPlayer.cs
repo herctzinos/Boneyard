@@ -8,8 +8,21 @@ public class MusicPlayer : MonoBehaviour
 {
 
     AudioSource audioSource;
-   /// public MusicPlayer musicPlayer;
-    // Start is called before the first frame update
+    public static MusicPlayer musicPlayer = null;
+    private void Awake()
+    {
+        if (musicPlayer == null)
+        {
+            musicPlayer = this;
+        }
+        else if (musicPlayer != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
+
     void Start()
     {
         DontDestroyOnLoad(this);
@@ -24,26 +37,10 @@ public class MusicPlayer : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name != "Start Screen" && SceneManager.GetActiveScene().name != "Splash Screen" && SceneManager.GetActiveScene().name != "Options Screen")
+        if (SceneManager.GetActiveScene().name != "StartScreen" && SceneManager.GetActiveScene().name != "SplashScreen" &&
+            SceneManager.GetActiveScene().name != "OptionsScreen" && SceneManager.GetActiveScene().name != "StatsScreen")
         {
-            //Destroy(audioSource);
             Destroy(gameObject);
         }
-
-/*        if ((SceneManager.GetActiveScene().name == "Start Screen") && (!audioSource.isPlaying)) {
-
-            Destroy(gameObject);
-            MusicPlayer newMusicPlayer = Instantiate<MusicPlayer>(musicPlayer);
-
-            newMusicPlayer.GetComponent<AudioSource>().Play();
-            Debug.Log("Played");
-
-        }*/
-  
-    }
-
-    private object FindSceneObjectOfType<T>()
-    {
-        throw new NotImplementedException();
     }
 }

@@ -272,7 +272,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        gameManager.EndGame();
+        gameManager.LoadGameOverScene();
     }
 
     public GameObject GetActiveWeapon()

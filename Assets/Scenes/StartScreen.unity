@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 28562746}
   - component: {fileID: 28562745}
   - component: {fileID: 28562747}
+  - component: {fileID: 28562748}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -213,6 +214,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 4
   m_AspectRatio: 1.6
+--- !u!95 &28562748
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28562743}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 86c0e32565a8b8b44b285c53f5a984a6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &279106810
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -1600.2, y: 45.805}
+  m_AnchoredPosition: {x: -1594, y: 58.13571}
   m_SizeDelta: {x: 639.64, y: 91.609}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &279106812
@@ -439,7 +459,7 @@ PrefabInstance:
     - target: {fileID: 6717387399972688974, guid: 592fb08f94d8dcd4fb8955bdb1565ce4,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 592fb08f94d8dcd4fb8955bdb1565ce4, type: 3}
@@ -490,7 +510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -1604.8, y: -48.33069}
+  m_AnchoredPosition: {x: -1598.6001, y: -30}
   m_SizeDelta: {x: 630.32, y: 93.8801}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &487260171
@@ -878,7 +898,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -1590.2, y: 135.11}
+  m_AnchoredPosition: {x: -1590.2, y: 138}
   m_SizeDelta: {x: 659.6, y: 87}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009339748
@@ -969,7 +989,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1912508156}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadNextScene
+        m_MethodName: LoadGameScene1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1046,11 +1066,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6448570939318303965, guid: 55b4f30b377fd497dad42b5e41357b49,
+        type: 3}
+      propertyPath: m_TagString
+      value: GameManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55b4f30b377fd497dad42b5e41357b49, type: 3}
 --- !u!114 &1912508156 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6448570939318303955, guid: 55b4f30b377fd497dad42b5e41357b49,
+  m_CorrespondingSourceObject: {fileID: 7729811724747432399, guid: 55b4f30b377fd497dad42b5e41357b49,
     type: 3}
   m_PrefabInstance: {fileID: 1912508155}
   m_PrefabAsset: {fileID: 0}

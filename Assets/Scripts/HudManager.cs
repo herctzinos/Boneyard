@@ -40,12 +40,20 @@ public class HudManager : MonoBehaviour
 
     [SerializeField]
     private Text goldText;
-    private float goldAmmount;
+    private float goldAmount;
 
     [SerializeField]
     private GameObject levelupMenu;
 
+
     private PlayerController player;
+
+    [Header("Fields for Stats Screen")]
+    [SerializeField]
+    private GameObject stats;
+
+    [SerializeField]
+    private Text healthTotal, manaTotal, experienceTotal, goldTotal;
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +69,10 @@ public class HudManager : MonoBehaviour
         HandleManaBar();
         HandleExpBar();
         HandleGold();
+        HandleHealthStat();
+        HandleManaStat();
+        HandleExpStat();
+        HandleGoldStat();
     }
 
     private void HandleHealthBar()
@@ -93,9 +105,35 @@ public class HudManager : MonoBehaviour
 
     private void HandleGold()
     {
-        float goldSmooth = Mathf.Lerp(goldAmmount , player.GetGold(),Time.deltaTime*5);
-        goldAmmount = goldSmooth;
+        float goldSmooth = Mathf.Lerp(goldAmount , player.GetGold(),Time.deltaTime*5);
+        goldAmount = goldSmooth;
         goldText.text = Mathf.Round(goldSmooth).ToString();
+    }
+    private void HandleHealthStat()
+    {
+        float maxHealth = player.GetMaxHealth();
+        healthTotal.text = maxHealth.ToString();
+    }
+
+    private void HandleManaStat()
+    {
+        float maxMana = player.GetMaxMana();
+        manaTotal.text = maxMana.ToString();
+
+    }
+
+    private void HandleExpStat()
+    {
+        float maxExp = player.GetExp();
+        int level = player.GetLevel();
+        experienceTotal.text = maxExp.ToString();
+
+    }
+
+    private void HandleGoldStat()
+    {
+        goldAmount = player.GetGold();
+        goldTotal.text = goldAmount.ToString();
     }
 
     private float MapValue(float value,  float maxValue)
@@ -113,6 +151,20 @@ public class HudManager : MonoBehaviour
     public void HideLevelUpMenu()
     {
         levelupMenu.SetActive(false);
+        LMXinfo.SetActive(true);
+        playerControls.SetActive(true);
+
+    } 
+    public void DisplayStats()
+    {
+        LMXinfo.SetActive(false);
+        playerControls.SetActive(false);
+        stats.SetActive(true);
+    }
+
+    public void HideStats()
+    {
+        stats.SetActive(false);
         LMXinfo.SetActive(true);
         playerControls.SetActive(true);
 
