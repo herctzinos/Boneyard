@@ -27,8 +27,11 @@ public class PlayerController : MonoBehaviour
     private JoyButton joybutton;
 
     [Header("Leveling data")]
-    [SerializeField]
 
+    [SerializeField]
+    private GameObject playerModel;
+
+    [SerializeField]
     private float levelUpFactor = 1.2f;
     private float health;
     private int gold;
@@ -41,20 +44,25 @@ public class PlayerController : MonoBehaviour
     private float keyDelay = 0.1f;
     private Weapon activeWeaponScript;
     private GameManager gameManager;
-
+    private GameObject gM;
+    private Animator playerAnimator;
+    private bool isMoving=false;
+    private bool isAttacking = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject gM = GameObject.FindGameObjectWithTag("GameManager");
+        gM=GameObject.FindGameObjectWithTag("GameManager");
         if (gM) gameManager = gM.GetComponent<GameManager>();
-
+        
         playerRB = GetComponent<Rigidbody>();
         weapon = GameObject.FindGameObjectWithTag("active_weapon");
         activeWeaponScript = this.weapon.GetComponent<Weapon>();
-
+        playerAnimator = playerModel.GetComponent<Animator>();
         ResetStats();
     }
+
+
 
     private void FixedUpdate()
     {
@@ -65,8 +73,10 @@ public class PlayerController : MonoBehaviour
         Vector3 newPlayerRotation = GetPlayerRotation();
         
         MoveAndRotatePlayer(newPlayerVelocity,newPlayerRotation);
+
         CheckFire(newPlayerRotation);
         CheckHealth();
+        HandleAnimations();
 
     }
 
@@ -81,14 +91,16 @@ public class PlayerController : MonoBehaviour
     {
         timePassed += Time.deltaTime;
 
-        if (rotation.x!=0f || rotation.z!=0f)
+        if (rotation.x != 0f || rotation.z != 0f)
         {
+            isAttacking = true;
             if (timePassed >= keyDelay)
             {
                 timePassed = 0f;
                 Attack();
             }
         }
+        else isAttacking = false;
     }
 
     Vector3 GetPlayerMovement()
@@ -122,16 +134,17 @@ public class PlayerController : MonoBehaviour
     void MoveAndRotatePlayer(Vector3 movement, Vector3 rotation)
     {
 
-        if (rotation.x != 0f || rotation.z != 0f) { 
+        if (rotation.x != 0f || rotation.z != 0f)
+        {
             transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, rotation, smoothRotate));
+            //isMoving = true;
         }
         else if (movement.x != 0f || movement.z != 0f)
         {
             transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, movement, smoothRotate));
+            isMoving = true;
         }
-
-
-        //transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
+        else isMoving = false;
         playerRB.velocity = movement * moveSpeed * Time.deltaTime;
     }
 
@@ -278,5 +291,12 @@ public class PlayerController : MonoBehaviour
     public GameObject GetActiveWeapon()
     {
         return weapon;
+    }
+
+    private void HandleAnimations()
+    {
+        playerAnimator.SetBool("isWalking", isMoving);
+        playerAnimator.SetBool("isAttacking", isAttacking);
+
     }
 }
