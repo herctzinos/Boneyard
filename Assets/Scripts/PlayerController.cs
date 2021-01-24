@@ -49,7 +49,26 @@ public class PlayerController : MonoBehaviour
     private bool isMoving=false;
     private bool isAttacking = true;
 
+    private InputActions inputActions;
+    Vector3 movementInput;
+    Vector3 attackInput;
+
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        MapControls();
+    }
+
+    private void OnEnable()
+    {
+        inputActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.Disable();
+    }
     void Start()
     {
         gM=GameObject.FindGameObjectWithTag("GameManager");
@@ -59,7 +78,7 @@ public class PlayerController : MonoBehaviour
         weapon = GameObject.FindGameObjectWithTag("active_weapon");
         activeWeaponScript = this.weapon.GetComponent<Weapon>();
         playerAnimator = playerModel.GetComponent<Animator>();
-        ResetStats();
+        ResetStats();      
     }
 
 
@@ -68,16 +87,10 @@ public class PlayerController : MonoBehaviour
     {
         CheckExpLevelUp();
         RegenMana();
-
-        Vector3 newPlayerVelocity = GetPlayerMovement();
-        Vector3 newPlayerRotation = GetPlayerRotation();
-        
-        MoveAndRotatePlayer(newPlayerVelocity,newPlayerRotation);
-
-        CheckFire(newPlayerRotation);
+        MoveAndRotatePlayer();
+        CheckFire();
         CheckHealth();
         HandleAnimations();
-
     }
 
     private void RegenMana()
@@ -87,11 +100,11 @@ public class PlayerController : MonoBehaviour
             mana += manaRegenRate;
         }
     }
-    private void CheckFire(Vector3 rotation)
+    private void CheckFire()
     {
         timePassed += Time.deltaTime;
 
-        if (rotation.x != 0f || rotation.z != 0f)
+        if (attackInput.x != 0f || attackInput.z != 0f)
         {
             isAttacking = true;
             if (timePassed >= keyDelay)
@@ -102,53 +115,23 @@ public class PlayerController : MonoBehaviour
         }
         else isAttacking = false;
     }
-
-    Vector3 GetPlayerMovement()
-    {
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");
-        float moveVertical = Input.GetAxisRaw("Vertical");
-        
-
-        //float moveHorizontal = leftJoystick.Horizontal;
-        //float moveVertical = leftJoystick.Vertical;
-
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
-        return movement;
-    }
-
-    Vector3 GetPlayerRotation()
-    {
-       
-        //float rotateHorizontal = rightJoystick.Horizontal;
-        //float rotateVertical = rightJoystick.Vertical;
-
-        float rotateHorizontal = Input.GetAxis("RightHorizontal");
-        float rotateVertical = Input.GetAxis("RightVertical");
-
-        Vector3 rotation = new Vector3(rotateHorizontal, 0.0f, rotateVertical);
-
-        return rotation;
-    }
-
-    void MoveAndRotatePlayer(Vector3 movement, Vector3 rotation)
+    void MoveAndRotatePlayer()
     {
 
-        if (rotation.x != 0f || rotation.z != 0f)
+        if (attackInput.x != 0f || attackInput.z != 0f)
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, rotation, smoothRotate));
-            //isMoving = true;
+            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, attackInput, smoothRotate));
         }
-        else if (movement.x != 0f || movement.z != 0f)
+        else if (movementInput.x != 0f || movementInput.z != 0f)
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, movement, smoothRotate));
+            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, movementInput, smoothRotate));
             isMoving = true;
         }
         else isMoving = false;
-        playerRB.velocity = movement * moveSpeed * Time.deltaTime;
+        playerRB.velocity = movementInput * moveSpeed * Time.deltaTime;
     }
 
-    void Attack()
+    public void Attack()
     {
         float requiredMana = activeWeaponScript.GetRequiredMana();
         //Debug.Log("Mana: " + mana + " required: " + requiredMana);
@@ -298,5 +281,22 @@ public class PlayerController : MonoBehaviour
         playerAnimator.SetBool("isWalking", isMoving);
         playerAnimator.SetBool("isAttacking", isAttacking);
 
+    }
+
+    private void MapControls()
+    {
+        inputActions = new InputActions();
+        inputActions.Player.Move.performed += ctx =>
+        {
+            movementInput.x = ctx.ReadValue<Vector2>().x;
+            movementInput.z = ctx.ReadValue<Vector2>().y;
+        };
+        inputActions.Player.Move.canceled += ctx => movementInput = Vector3.zero;
+        inputActions.Player.Attack.performed += ctx =>
+        {
+            attackInput.x = ctx.ReadValue<Vector2>().x;
+            attackInput.z = ctx.ReadValue<Vector2>().y;
+        };
+        inputActions.Player.Attack.canceled += ctx => attackInput = Vector3.zero;
     }
 }
