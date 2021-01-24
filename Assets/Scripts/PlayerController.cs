@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour
 
     private InputActions inputActions;
     Vector3 movementInput;
-    Vector3 attackInput;
+    bool attackInput;
+    Vector3 lookInput;
 
     // Start is called before the first frame update
 
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
         CheckFire();
         CheckHealth();
         HandleAnimations();
+        Debug.Log(lookInput);
     }
 
     private void RegenMana()
@@ -104,7 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         timePassed += Time.deltaTime;
 
-        if (attackInput.x != 0f || attackInput.z != 0f)
+        if (attackInput)
         {
             isAttacking = true;
             if (timePassed >= keyDelay)
@@ -118,9 +120,9 @@ public class PlayerController : MonoBehaviour
     void MoveAndRotatePlayer()
     {
 
-        if (attackInput.x != 0f || attackInput.z != 0f)
+        if (lookInput.x != 0f || lookInput.z != 0f)
         {
-            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, attackInput, smoothRotate));
+            transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, lookInput, smoothRotate));
         }
         else if (movementInput.x != 0f || movementInput.z != 0f)
         {
@@ -294,9 +296,14 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Move.canceled += ctx => movementInput = Vector3.zero;
         inputActions.Player.Attack.performed += ctx =>
         {
-            attackInput.x = ctx.ReadValue<Vector2>().x;
-            attackInput.z = ctx.ReadValue<Vector2>().y;
+            attackInput = true;
         };
-        inputActions.Player.Attack.canceled += ctx => attackInput = Vector3.zero;
+        inputActions.Player.Attack.canceled += ctx => attackInput = false;
+        inputActions.Player.Look.performed += ctx =>
+        {
+            lookInput.x = ctx.ReadValue<Vector2>().x;
+            lookInput.z = ctx.ReadValue<Vector2>().y;
+        };
+        inputActions.Player.Look.canceled += ctx => lookInput = Vector3.zero;
     }
 }
