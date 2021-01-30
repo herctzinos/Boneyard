@@ -246,8 +246,8 @@ public class PlayerController : MonoBehaviour
 
     private int LevelUp()
     {
-        gameManager.HandleOpenLevelUpMenu();
         level += 1;
+        gameManager.HandleOpenLevelUpMenu();
        // LevelUpStats();
        // gameManager.SaveData();
        // ResetStats();
@@ -263,6 +263,7 @@ public class PlayerController : MonoBehaviour
     }
     public void AttachSelectedSkillToPlayer(int extraHealthEarned, int extraManaEarned, int extraPowerEarned)
     {
+
         maxHealthEarned += extraHealthEarned;
         maxManaEarned += extraManaEarned;
         maxPowerEarned += extraPowerEarned;
@@ -270,14 +271,15 @@ public class PlayerController : MonoBehaviour
 
     public void ResetStats()
     {
-        currentHealth = maxHealthEarned;
-        currentMana = maxManaEarned;
+        //currentHealth = maxHealthEarned;
+      //  currentMana = maxManaEarned;
         currentExp = 0;
-       // Debug.Log(gameManager.gd.playerGold);
+        // Debug.Log(gameManager.gd.playerGold);
+       // level = gameManager.gd.maxLevelReached;
         gold = gameManager.gd.playerGold;
-        //currentHealth = gameManager.gd.maxHealthReached;
-       // currentMana = gameManager.gd.maxManaReached;
-        //power = gameManager.gd.maxPower;
+        currentHealth = gameManager.gd.maxHealthReached;
+        currentMana = gameManager.gd.maxManaReached;
+        currentPower = gameManager.gd.maxPowerReached ;
     }
 
     public void LoadStats()
@@ -287,10 +289,16 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Max level " + gameManager.gd.maxLevelReached);
         if (gameManager.gd.maxLevelReached > 1)
         {
+            level = gameManager.gd.maxLevelReached;
             gold = gameManager.gd.playerGold;
             currentHealth = gameManager.gd.maxHealthReached;
+            maxHealthEarned = gameManager.gd.maxHealthReached;
+
             currentMana = gameManager.gd.maxManaReached;
+            maxManaEarned = gameManager.gd.maxManaReached;
+
            currentPower = gameManager.gd.maxPowerReached;
+           maxPowerEarned = gameManager.gd.maxPowerReached;
         }
         else
         {

@@ -26743,7 +26743,7 @@ MonoBehaviour:
   maxHealthEarnedText: {fileID: 2109124811}
   maxManaEarnedText: {fileID: 660682527}
   maxPowerEarnedText: {fileID: 0}
-  experienceTotalText: {fileID: 1191899982}
+  levelTotalText: {fileID: 1191899982}
   goldTotalText: {fileID: 943177942}
 --- !u!4 &913587066 stripped
 Transform:
@@ -34212,7 +34212,7 @@ GameObject:
   - component: {fileID: 1191899983}
   - component: {fileID: 1191899982}
   m_Layer: 5
-  m_Name: EperienceTotal
+  m_Name: LevelTotal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34503,7 +34503,7 @@ MonoBehaviour:
   maxHealthEarnedText: {fileID: 0}
   maxManaEarnedText: {fileID: 0}
   maxPowerEarnedText: {fileID: 0}
-  experienceTotalText: {fileID: 0}
+  levelTotalText: {fileID: 0}
   goldTotalText: {fileID: 0}
 --- !u!114 &1203777881
 MonoBehaviour:
@@ -41265,7 +41265,7 @@ GameObject:
   - component: {fileID: 1441753882}
   - component: {fileID: 1441753881}
   m_Layer: 5
-  m_Name: Experience
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41323,7 +41323,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Experience:'
+  m_Text: 'Level:'
 --- !u!222 &1441753882
 CanvasRenderer:
   m_ObjectHideFlags: 0

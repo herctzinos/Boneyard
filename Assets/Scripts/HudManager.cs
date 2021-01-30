@@ -56,7 +56,7 @@ public class HudManager : MonoBehaviour
     private GameObject stats;
 
     [SerializeField]
-    private Text maxHealthEarnedText, maxManaEarnedText, maxPowerEarnedText, experienceTotalText, goldTotalText;
+    private Text maxHealthEarnedText, maxManaEarnedText, maxPowerEarnedText, levelTotalText, goldTotalText;
 
     GameObject oldHealthButton;
     GameObject oldManaButton;
@@ -136,7 +136,7 @@ public class HudManager : MonoBehaviour
         float currentExp = player.GetCurrentExp();
         float expToLevelUp = player.GetExpToLevelUp();
         int level = player.GetLevel();
-        experienceTotalText.text = "Level: " + level + ". Next level:" + currentExp.ToString() +"/" + expToLevelUp.ToString();
+        levelTotalText.text = level.ToString();
 
     }
 

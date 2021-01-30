@@ -84,10 +84,10 @@ public class SkillsManager : MonoBehaviour
             buttonSkillsManager.manaEarned,
             buttonSkillsManager.powerEarned);
         }
+        gameManager.SaveData();
         playerController.ResetStats();  
         gameManager.HandleCloseLevelUpMenu();
         //gameManager.LoadData();
-       // gameManager.SaveData();
     }
 }
 
