@@ -205,12 +205,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: 4
-  health: 10
+  enemyHealth: 5
   attackStrength: 20
   returnedExp: 10
   itemToDrop: {fileID: 6507553858304940524, guid: 8f0b966bf29507244a9c253d1810afae,
     type: 3}
-  itemDropProbavility: 0.5
+  itemDropProbavility: 2
 --- !u!54 &-3382326421109742962
 Rigidbody:
   m_ObjectHideFlags: 0

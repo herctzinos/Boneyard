@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -43,8 +44,10 @@ public class HudManager : MonoBehaviour
     private float goldAmount;
 
     [SerializeField]
-    private GameObject levelupMenu;
+    public GameObject levelupPanel;
 
+    [SerializeField]
+    private SkillsManager skillManager;
 
     private PlayerController player;
 
@@ -53,18 +56,23 @@ public class HudManager : MonoBehaviour
     private GameObject stats;
 
     [SerializeField]
-    private Text healthTotal, manaTotal, experienceTotal, goldTotal;
+    private Text maxHealthEarnedText, maxManaEarnedText, maxPowerEarnedText, experienceTotalText, goldTotalText;
+
+    GameObject oldHealthButton;
+    GameObject oldManaButton;
+    GameObject oldPowerButton;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-       
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
         HandleHealthBar();
         HandleManaBar();
         HandleExpBar();
@@ -73,32 +81,33 @@ public class HudManager : MonoBehaviour
         HandleManaStat();
         HandleExpStat();
         HandleGoldStat();
+
     }
 
     private void HandleHealthBar()
     {
-        float health = player.GetHealth();
-        float maxHealth = player.GetMaxHealth();
-        healthBar.fillAmount = MapValue(health,maxHealth);
-        healthText.text = health.ToString("0") + " / " + maxHealth.ToString("0");
+        float currentHealth = player.GetCurrentHealth();
+        float maxHealthEarned = player.GetMaxHealthEarned();
+        healthBar.fillAmount = MapValue(currentHealth, maxHealthEarned);
+        healthText.text = currentHealth.ToString("0") + " / " + maxHealthEarned.ToString("0");
     }
 
     private void HandleManaBar()
     {
-        float mana = player.GetMana();
-        float maxMana = player.GetMaxMana();
-        manaBar.fillAmount = MapValue(mana, maxMana);
-        manaText.text = mana.ToString("0") + " / " + maxMana.ToString("0");
+        float currentMana = player.GetCurrentMana();
+        float maxManaEarned = player.GetMaxManaEarned();
+        manaBar.fillAmount = MapValue(currentMana, maxManaEarned);
+        manaText.text = currentMana.ToString("0") + " / " + maxManaEarned.ToString("0");
 
     }
 
     private void HandleExpBar()
     {
-        float exp = player.GetExp();
-        float maxExp = player.GetMaxExp();
+        float exp = player.GetCurrentExp();
+        float expToLevelUp = player.GetExpToLevelUp();
         int level = player.GetLevel();
-        expBar.fillAmount = MapValue(exp, maxExp);
-        expText.text = exp.ToString("0") + " / " + maxExp.ToString("0");
+        expBar.fillAmount = MapValue(exp, expToLevelUp);
+        expText.text = exp.ToString("0") + " / " + expToLevelUp.ToString("0");
         levelText.text = level.ToString();
 
     }
@@ -111,29 +120,30 @@ public class HudManager : MonoBehaviour
     }
     private void HandleHealthStat()
     {
-        float maxHealth = player.GetMaxHealth();
-        healthTotal.text = maxHealth.ToString();
+        float maxHealthEarned = player.GetMaxHealthEarned();
+        maxHealthEarnedText.text = maxHealthEarned.ToString();
     }
 
     private void HandleManaStat()
     {
-        float maxMana = player.GetMaxMana();
-        manaTotal.text = maxMana.ToString();
+        float maxManaEarned = player.GetMaxManaEarned();
+        maxManaEarnedText.text = maxManaEarned.ToString();
 
     }
 
     private void HandleExpStat()
     {
-        float maxExp = player.GetExp();
+        float currentExp = player.GetCurrentExp();
+        float expToLevelUp = player.GetExpToLevelUp();
         int level = player.GetLevel();
-        experienceTotal.text = maxExp.ToString();
+        experienceTotalText.text = "Level: " + level + ". Next level:" + currentExp.ToString() +"/" + expToLevelUp.ToString();
 
     }
 
     private void HandleGoldStat()
     {
         goldAmount = player.GetGold();
-        goldTotal.text = goldAmount.ToString();
+        goldTotalText.text = goldAmount.ToString();
     }
 
     private float MapValue(float value,  float maxValue)
@@ -143,14 +153,72 @@ public class HudManager : MonoBehaviour
 
     public void DisplayLevelUpMenu()
     {
+        PrepareButtonSkills();
+
+ 
         LMXinfo.SetActive(false);
         playerControls.SetActive(false);
-        levelupMenu.SetActive(true);
+        levelupPanel.SetActive(true);
     }
+
+    private void PrepareButtonSkills() {
+ 
+
+        foreach (Transform oldSkillButton in levelupPanel.transform)
+        {
+            if (oldSkillButton.gameObject.tag == "Health") {
+                 oldHealthButton = oldSkillButton.gameObject;
+            }
+            else if (oldSkillButton.gameObject.tag == "Mana"){
+                oldManaButton = oldSkillButton.gameObject;
+            }
+            else if (oldSkillButton.gameObject.tag == "Power")
+            {
+                oldPowerButton = oldSkillButton.gameObject;
+            }
+        }
+
+        PrepareHealthButtonSkill(oldHealthButton);
+        PrepareManaButtonSkill(oldManaButton);
+        PreparePowerButtonSkill(oldPowerButton);
+    }
+
+    private void PrepareHealthButtonSkill(GameObject oldHealthButton)
+    { 
+        Vector3 healthSkillPosition = oldHealthButton.transform.position;
+        Transform healthTransform = oldHealthButton.transform;
+        Destroy(oldHealthButton);
+        GameObject prefabHealthSkillForLvlUp = skillManager.FetchRandomHealthSkillForLvlUp();
+        GameObject healthSkillForLvlUp = Instantiate(prefabHealthSkillForLvlUp, healthTransform);
+        healthSkillForLvlUp.transform.SetParent(levelupPanel.transform);
+        healthSkillForLvlUp.transform.position = healthSkillPosition;
+    }
+    private void PrepareManaButtonSkill(GameObject oldManaButton)
+    {
+        Vector3 manaSkillPosition = oldManaButton.transform.position;
+        Transform manaTransform = oldManaButton.transform;
+        Destroy(oldManaButton);
+        GameObject PrefabManaSkillForLvlUp = skillManager.FetchRandomManaSkillForLvlUp();
+        GameObject manaSkillForLvlUp = Instantiate(PrefabManaSkillForLvlUp, manaTransform);
+        manaSkillForLvlUp.transform.SetParent(levelupPanel.transform);
+        manaSkillForLvlUp.transform.position = manaSkillPosition;
+    }
+    private void PreparePowerButtonSkill(GameObject oldPowerButton)
+    {
+        Vector3 powerSkillPosition = oldPowerButton.transform.position;
+        Transform powerTransform = oldPowerButton.transform;
+        Destroy(oldPowerButton);
+        GameObject prefabPowerSkillForLvlUp = skillManager.FetchRandomPowerSkillForLvlUp();
+        GameObject powerSkillForLvlUp = Instantiate(prefabPowerSkillForLvlUp, powerTransform);
+        powerSkillForLvlUp.transform.SetParent(levelupPanel.transform);
+        powerSkillForLvlUp.transform.position = powerSkillPosition;
+    }
+
+
 
     public void HideLevelUpMenu()
     {
-        levelupMenu.SetActive(false);
+        levelupPanel.SetActive(false);
         LMXinfo.SetActive(true);
         playerControls.SetActive(true);
 
@@ -169,5 +237,4 @@ public class HudManager : MonoBehaviour
         playerControls.SetActive(true);
 
     }
-
 }

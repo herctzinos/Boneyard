@@ -23,11 +23,14 @@ public class ChooseSkillScript : MonoBehaviour
 
     }
 
+    public void FetchRandomSkillForLvlUp()
+    {
 
+    }
 
     public void SkillPress()
     {
-        gameManager.ProvidePlayerSkill(projectile,spread,range);
+        gameManager.AttachSelectedSkillToPlayer(projectile,spread,range);
         gameManager.HandleCloseLevelUpMenu();
     }
 

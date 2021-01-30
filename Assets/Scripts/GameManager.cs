@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController;
 
     public GameData gd;
-    
+
     // Start is called before the first frame update
     public void Start()
     {
@@ -41,10 +41,9 @@ public class GameManager : MonoBehaviour
         if (player) playerController = player.GetComponent<PlayerController>();
         hud = GameObject.FindGameObjectWithTag("HUD");
         if (hud) hudManager = hud.GetComponent<HudManager>();
-        
+
         CheckGlobalEnemySpawn();
     }
-
     IEnumerator WaitForTime()
     {
         yield return new WaitForSeconds(timeToWait);
@@ -75,27 +74,23 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(currentSceneIndex);
-
     }
 
     public void LoadStartScreen()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("StartScreen");
-
     }
     
     public void LoadSplashScreen()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("SplashScreen");
-
     }
 
     public void LoadOptionsScreen()
     {
         SceneManager.LoadScene("OptionsScreen");
-
     } 
     
     public void OpenStatsScreen()
@@ -137,7 +132,9 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
         endedGame = true;
+        LoadData();
         SaveData();
+       // SaveDataOnKill();
         SceneManager.LoadScene("GameOverScene");
     }
 
@@ -147,7 +144,7 @@ public class GameManager : MonoBehaviour
         hudManager.DisplayLevelUpMenu();
     }
 
-    public void ProvidePlayerSkill(int projectile, int spread, int range)
+    public void AttachSelectedSkillToPlayer(int projectile, int spread, int range)
     {
         Weapon activeWeaponScript = playerController.GetActiveWeapon().GetComponent<Weapon>();
         activeWeaponScript.UpgradeStats(projectile, spread, range);
@@ -174,7 +171,7 @@ public class GameManager : MonoBehaviour
         return endedGame;
     }
 
-    private void LoadData()
+    public void LoadData()
     {
         Debug.Log("GameData: " + PlayerPrefs.GetString("GameData"));
 
@@ -192,7 +189,17 @@ public class GameManager : MonoBehaviour
     {
         gd.playerGold = playerController.GetGold();
         gd.maxLevelReached = playerController.GetLevel();
+        gd.maxHealthReached = playerController.GetMaxHealthEarned();
+        gd.maxManaReached = playerController.GetMaxManaEarned();
+        gd.maxPowerReached = playerController.GetMaxPowerEarned();
         PlayerPrefs.SetString("GameData",JsonUtility.ToJson(gd));
+    }
+
+    public void SaveDataOnKill()
+    {
+        gd.playerGold = playerController.GetGold();
+       
+        PlayerPrefs.SetString("GameData", JsonUtility.ToJson(gd));
     }
 
     private bool CheckGlobalEnemySpawn()

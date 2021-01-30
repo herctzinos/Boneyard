@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +8,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Initial Stats")]
     [SerializeField]
-    private float maxHealth = 100;
+    private float maxHealthEarned = 100;
     [SerializeField]
-    private float maxMana = 100;
-    private float maxExp = 100;
+    private float maxManaEarned = 100;
+    private float maxPowerEarned = 20;
+    public float expToLevelUp = 1;
     [SerializeField]
     private float moveSpeed = 1;
     [SerializeField]
@@ -30,13 +32,15 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private GameObject playerModel;
-
+    
+    [Header("Player Current Stats")]
     [SerializeField]
-    private float levelUpFactor = 1.2f;
-    private float health;
+   // private float levelUpFactor = 1.2f;
+    private float currentHealth;
     private int gold;
-    private float mana;
-    private float exp;
+    private float currentMana;
+    private float currentPower;
+    private float currentExp;
     private int level=1;
     private GameObject weapon;
     private Rigidbody playerRB;
@@ -79,7 +83,7 @@ public class PlayerController : MonoBehaviour
         weapon = GameObject.FindGameObjectWithTag("active_weapon");
         activeWeaponScript = this.weapon.GetComponent<Weapon>();
         playerAnimator = playerModel.GetComponent<Animator>();
-        ResetStats();      
+        LoadStats();      
     }
 
 
@@ -92,14 +96,14 @@ public class PlayerController : MonoBehaviour
         CheckFire();
         CheckHealth();
         HandleAnimations();
-        Debug.Log(lookInput);
     }
+
 
     private void RegenMana()
     {
-        if (mana < maxMana)
+        if (currentMana < maxManaEarned)
         {
-            mana += manaRegenRate;
+            currentMana += manaRegenRate;
         }
     }
     private void CheckFire()
@@ -138,11 +142,11 @@ public class PlayerController : MonoBehaviour
         float requiredMana = activeWeaponScript.GetRequiredMana();
         //Debug.Log("Mana: " + mana + " required: " + requiredMana);
 
-        if (requiredMana <= mana)
+        if (requiredMana <= currentMana)
         {
             if (activeWeaponScript.fire(requiredMana))
             {
-                mana -= requiredMana;
+                currentMana -= requiredMana;
             }
         }
         else
@@ -159,35 +163,39 @@ public class PlayerController : MonoBehaviour
             GaintGold(goldAmmount);
         }
     }
-    public void ReceiveDamage(float damage,Vector3 attackerDirecion)
+    public void ReceiveDamage(float damage,Vector3 attackerDirection)
+    {
+        currentHealth -= damage;
+        playerRB.AddForce(attackerDirection * damage * 5, ForceMode.Impulse);
+    }
+
+/*    public void ReceiveDamage(float damage)
     {
         health -= damage;
-        playerRB.AddForce(attackerDirecion * damage * 5, ForceMode.Impulse);
+    }*/
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
     }
 
-    public void ReceiveDamage(float damage)
+    public float GetCurrentMana()
     {
-        health -= damage;
+        return currentMana;
     }
 
-    public float GetHealth()
+    public float GetCurrentExp()
     {
-        return health;
-    }
-
-    public float GetMana()
-    {
-        return mana;
-    }
-
-    public float GetExp()
-    {
-        return exp;
+        return currentExp;
     }
 
     public int GetGold()
     {
         return gold;
+    }  
+    public float GetMaxPowerEarned()
+    {
+        return maxPowerEarned;
     }
 
     public void SetGold(int goldToSet)
@@ -205,23 +213,23 @@ public class PlayerController : MonoBehaviour
         return level;
     }
 
-    public float GetMaxHealth()
+    public float GetMaxHealthEarned()
     {
-        return maxHealth;
+        return maxHealthEarned;
     }
 
-    public float GetMaxMana()
+    public float GetMaxManaEarned()
     {
-        return maxMana;
+        return maxManaEarned;
     }
-    public float GetMaxExp()
+    public float GetExpToLevelUp()
     {
-        return maxExp;
+        return expToLevelUp;
     }
 
     public void GainExp(int gainedExp)
     {
-        exp+= gainedExp;
+        currentExp+= gainedExp;
     }
 
     private int CheckExpLevelUp()
@@ -232,7 +240,7 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckLevelUp()
     {
-        if (exp >= maxExp) return true;
+        if (currentExp >= expToLevelUp) return true;
         return false;
     }
 
@@ -240,32 +248,64 @@ public class PlayerController : MonoBehaviour
     {
         gameManager.HandleOpenLevelUpMenu();
         level += 1;
-        LevelUpStats();
-        gameManager.SaveData();
-        ResetStats();
+       // LevelUpStats();
+       // gameManager.SaveData();
+       // ResetStats();
         return level;
     }
 
     private void LevelUpStats()
     {
-        maxHealth *= levelUpFactor;
+/*        maxHealth *= levelUpFactor;
         maxMana *= levelUpFactor;
-        maxExp *= levelUpFactor;
+        maxExp *= levelUpFactor;*/
         //Debug.Log("levelUpFactor: " + levelUpFactor.ToString() + " maxMana: " + maxMana.ToString());
     }
-
-    private void ResetStats()
+    public void AttachSelectedSkillToPlayer(int extraHealthEarned, int extraManaEarned, int extraPowerEarned)
     {
-        mana = maxMana;
-        health = maxHealth;
-        exp = 0;
-        Debug.Log(gameManager.gd.playerGold);
+        maxHealthEarned += extraHealthEarned;
+        maxManaEarned += extraManaEarned;
+        maxPowerEarned += extraPowerEarned;
+    }
+
+    public void ResetStats()
+    {
+        currentHealth = maxHealthEarned;
+        currentMana = maxManaEarned;
+        currentExp = 0;
+       // Debug.Log(gameManager.gd.playerGold);
         gold = gameManager.gd.playerGold;
+        //currentHealth = gameManager.gd.maxHealthReached;
+       // currentMana = gameManager.gd.maxManaReached;
+        //power = gameManager.gd.maxPower;
+    }
+
+    public void LoadStats()
+    {
+        gameManager.LoadData();
+
+        Debug.Log("Max level " + gameManager.gd.maxLevelReached);
+        if (gameManager.gd.maxLevelReached > 1)
+        {
+            gold = gameManager.gd.playerGold;
+            currentHealth = gameManager.gd.maxHealthReached;
+            currentMana = gameManager.gd.maxManaReached;
+           currentPower = gameManager.gd.maxPowerReached;
+        }
+        else
+        {
+            currentExp = 0;
+            currentHealth = maxHealthEarned;
+            currentMana = maxManaEarned;
+            currentExp = 0;
+            // Debug.Log(gameManager.gd.playerGold);
+
+        }
     }
 
     private void CheckHealth()
     {
-        if (health <= 0) Die();
+        if (currentHealth <= 0) Die();
     }
 
     private void Die()

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int velocity=5;
     [SerializeField]
-    private float health = 5;
+    private float enemyHealth = 5;
     [SerializeField]
     private int attackStrength = 5;
     [SerializeField]
@@ -77,8 +77,8 @@ public class Enemy : MonoBehaviour
 
     void ReceiveDamage(float damage)
     {
-        health -= damage;
-        if (health < 1) Kill();
+        enemyHealth -= damage;
+        if (enemyHealth < 1) Kill();
     }
 
     void Kill()

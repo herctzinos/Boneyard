@@ -12,6 +12,10 @@ TagManager:
   - enemyspawner
   - active_weapon
   - Gold
+  - LevelUpPanel
+  - Health
+  - Mana
+  - Power
   layers:
   - Default
   - TransparentFX
